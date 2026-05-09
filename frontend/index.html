@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Телемост — Главная</title>
+    <style>
+        body { font-family: sans-serif; display: flex; flex-direction: column; align-items: center; padding: 50px; }
+        .container { border: 1px solid #ccc; padding: 20px; border-radius: 8px; }
+        input { padding: 8px; margin: 5px; }
+        button { padding: 8px 15px; cursor: pointer; background: #007bff; color: white; border: none; border-radius: 4px; }
+    </style>
+</head>
+<body>
+    <h1>Телемост</h1>
+    <div class="container">
+        <h3>Создать комнату</h3>
+        <input type="text" id="roomName" placeholder="Название комнаты">
+        <button onclick="createRoom()">Создать</button>
+        <hr>
+        <h3>Войти по ID</h3>
+        <input type="text" id="roomId" placeholder="ID комнаты">
+        <button onclick="joinRoom()">Войти</button>
+    </div>
+
+    <script>
+        async function createRoom() {
+            const name = document.getElementById("roomName").value;
+            if (!name) return alert("Введите название");
+
+            const response = await fetch("/rooms", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ name: name })
+            });
+            const data = await response.json();
+            window.location.href = `/room/${data.ok.id}`;
+        }
+
+        function joinRoom() {
+            const roomId = document.getElementById("roomId").value;
+            if (!roomId) return alert("Введите ID");
+            window.location.href = `/room/${roomId}`;
+        }
+    </script>
+</body>
+</html>
